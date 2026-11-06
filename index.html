@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+</head>
+
+<body>
+
+    <h1>نظام إدارة وتحليل نتائج الطلاب</h1>
+
+    <p>افتح Console لمشاهدة النتائج</p>
+
+    <script>
+
+        const PASS_MARK = 50;
+        const MIN_ATTENDANCE = 75;
+
+        class Student {
+
+            constructor(id, name, grades, attendance) {
+
+                this.id = id;
+                this.name = name;
+                this.grades = grades;
+                this.attendance = attendance;
+
+            }
+
+
+            calculateAverage() {
+
+                const total = this.grades.reduce((sum, grade) => {
+                    return sum + grade;
+                }, 0);
+
+                return total / this.grades.length;
+
+            }
+
+
+            getGradeLetter(average) {
+
+                if (average >= 90) {
+                    return "A";
+                } else if (average >= 80) {
+                    return "B";
+                } else if (average >= 70) {
+                    return "C";
+                } else if (average >= 60) {
+                    return "D";
+                } else if (average >= PASS_MARK) {
+                    return "E";
+                } else {
+                    return "F";
+                }
+
+            }
+
+
+            getFinalResult(average) {
+
+                if (average >= PASS_MARK && this.attendance >= MIN_ATTENDANCE) {
+                    return "ناجح";
+                } else {
+                    return "يحتاج مراجعة";
+                }
+
+            }
+
+        }
+
+
+        const studentsList = [
+
+            new Student(101, "Ahmed", [40, 45, 50], 80),
+
+            new Student(102, "Mohamed", [60, 65, 70], 90),
+
+            new Student(103, "Ali", [42, 46, 47], 85),
+
+            new Student(104, "Sara", [90, 85, 95], 95)
+
+        ];
+
+
+        const strugglingStudents = studentsList.filter(student => {
+
+            const average = student.calculateAverage();
+
+            return average >= 40 && average <= 49;
+
+        });
+
+
+        const upgradedStudents = strugglingStudents.map(student => {
+
+            const average = student.calculateAverage();
+
+            return {
+                id: student.id,
+                name: student.name,
+                average: average + 5
+            };
+
+        });
+
+
+        const totalUpgraded = upgradedStudents.reduce((sum, student) => {
+
+            return sum + student.average;
+
+        }, 0);
+
+
+        let upgradedAverage = 0;
+
+        if (upgradedStudents.length > 0) {
+
+            upgradedAverage = totalUpgraded / upgradedStudents.length;
+
+        }
+
+
+        console.log("===== تقارير الطلاب =====");
+
+        for (let i = 0; i < studentsList.length; i++) {
+
+            const student = studentsList[i];
+
+            const average = student.calculateAverage();
+
+            const grade = student.getGradeLetter(average);
+
+            const result = student.getFinalResult(average);
+
+            console.log(`رقم الجلوس: ${student.id}`);
+
+            console.log(`اسم الطالب: ${student.name}`);
+
+            console.log(`المتوسط: ${average}`);
+
+            console.log(`التقدير: ${grade}`);
+
+            console.log(`النتيجة: ${result}`);
+
+            console.log("--------------------------");
+
+        }
+
+
+        console.log("===== الطلاب الحاصلون على الرأفة =====");
+
+        console.log(upgradedStudents);
+
+
+        console.log("===== متوسط الطلاب بعد الرأفة =====");
+
+        console.log(upgradedAverage);
+
+
+    </script>
+
+</body>
+
+</html>
